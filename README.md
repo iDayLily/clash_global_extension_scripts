@@ -1,0 +1,2 @@
+# clash_global_extension_scripts
+clash_verge_pre 全局脚本配置
