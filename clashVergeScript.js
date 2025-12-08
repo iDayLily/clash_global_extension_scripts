@@ -171,7 +171,7 @@ const ruleProviders = {
     "url": "https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Bahamut/Bahamut.yaml",
     "path": "./ruleset/blackmatrix7/bahamut.yaml"
   },
-  "google-gemini": {
+  "gemini": {
     ...ruleProviderCommon,
     "behavior": "classical",
     // "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/google-gemini.yaml",
@@ -225,10 +225,6 @@ const rules = [
   "DOMAIN-SUFFIX,github.io,节点选择", // Github Pages
   "DOMAIN,v2rayse.com,节点选择", // V2rayse节点工具
   "RULE-SET,steamcn,全局直连",
-  "RULE-SET,claude,Claude",
-  "RULE-SET,openai,OpenAI",
-  // "RULE-SET,google-gemini, AI",
-  "RULE-SET,microsoft,微软服务",
   // Loyalsoldier 规则集
   "RULE-SET,applications,全局直连",
   "RULE-SET,private,全局直连",
@@ -241,7 +237,11 @@ const rules = [
   "RULE-SET,BilibiliHMT,哔哩哔哩港澳台",
   "RULE-SET,bahamut,Bahamut",
   "RULE-SET,TikTok,TikTok",
+  "RULE-SET,gemini,Gemini",
   "RULE-SET,google,Google",
+  "RULE-SET,claude,Claude",
+  "RULE-SET,openai,OpenAI",
+  "RULE-SET,microsoft,微软服务",
   "RULE-SET,proxy,节点选择",
   "RULE-SET,gfw,节点选择",
   "RULE-SET,tld-not-cn,节点选择",
@@ -293,6 +293,7 @@ function main(config) {
       "type": "url-test",
       "tolerance": 100,
       "include-all": true,
+      "proxies": ["HK", "TW", "JP", "KR", "US", "DE", "SG", "FR", "UK"],
       "icon": "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/speed.svg"
     },
     {
@@ -416,6 +417,14 @@ function main(config) {
     },
     {
       ...groupBaseOption,
+      "name": "Gemini",
+      "proxies": ["US", "SG", "HK", "TW", "JP", "KR", "US", "DE", "FR", "UK", "全局直连"],
+      "type": "select",
+      "include-all": true,
+      "icon": "https://cdn.jsdelivr.net/gh/guaishouxiaoqi/icons@master/Color/Gemini.png"
+    },
+    {
+      ...groupBaseOption,
       "url": "https://claude.com",
       "expected-status": "200",
       "name": "Claude",
@@ -445,7 +454,7 @@ function main(config) {
       ...groupBaseOption,
       "name": "全局直连",
       "type": "select",
-      "proxies": ["DIRECT"],
+      "proxies": ["DIRECT", "节点选择", "延迟选优", "故障转移", "负载均衡(散列)", "负载均衡(轮询)"],
       "include-all": true,
       "icon": "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/link.svg"
     },
@@ -542,7 +551,7 @@ function main(config) {
       ...groupBaseOption,
       "name": "漏网之鱼",
       "type": "select",
-      "proxies": ["节点选择", "全局直连"],
+      "proxies": ["节点选择", "延迟选优", "故障转移", "负载均衡(散列)", "负载均衡(轮询)", "全局直连"],
       "include-all": true,
       "filter": "^(?!.*(官网|套餐|流量|异常|剩余)).*$",
       "icon": "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/fish.svg"
