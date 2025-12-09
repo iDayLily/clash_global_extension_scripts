@@ -5,9 +5,11 @@ const domesticNameservers = [
 ];
 // 国外DNS服务器
 const foreignNameservers = [
-  "https://208.67.222.222/dns-query", // OpenDNS
   "https://77.88.8.8/dns-query", //YandexDNS
-  "https://1.1.1.1/dns-query", // CloudflareDNS
+  "https://1.1.1.1/dns-query", // Cloudflare(主)
+  "https://1.0.0.1/dns-query", // Cloudflare(备)
+  "https://208.67.222.222/dns-query", // OpenDNS(主)
+  "https://208.67.220.220/dns-query", // OpenDNS(备)
   "https://8.8.4.4/dns-query", // GoogleDNS  
 
 ];
@@ -42,11 +44,14 @@ const dnsConfig = {
     "localhost.work.weixin.qq.com"
   ],
   "default-nameserver": ["223.5.5.5", "1.2.4.8"],//可修改成自己ISP的DNS
+  // "default-nameserver": ["223.5.5.5", "119.29.29.29", "1.1.1.1", "8.8.8.8"],
   "nameserver": [...foreignNameservers],
   "proxy-server-nameserver": [...domesticNameservers],
   "direct-nameserver": [...domesticNameservers],
   "nameserver-policy": {
-    "geosite:private,cn": domesticNameservers
+    "geosite:private,cn": domesticNameservers,
+    "geosite:google,youtube,telegram,gfw,geolocation-!cn": foreignNameservers
+
   }
 };
 // 规则集通用配置
@@ -141,29 +146,29 @@ const ruleProviders = {
     "url": "https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/OpenAI/OpenAI.yaml",
     "path": "./ruleset/blackmatrix7/openai.yaml"
   },
-  "YouTube": {
+  "youtube": {
     ...ruleProviderCommon,
     "behavior": "classical",
     "url": "https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/YouTube/YouTube.yaml",
-    "path": "./ruleset/blackmatrix7/YouTube.yaml"
+    "path": "./ruleset/blackmatrix7/youtube.yaml"
   },
-  "Netflix": {
+  "netflix": {
     ...ruleProviderCommon,
     "behavior": "classical",
     "url": "https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Netflix/Netflix_Classical.yaml",
-    "path": "./ruleset/blackmatrix7/Netflix.yaml"
+    "path": "./ruleset/blackmatrix7/netflix.yaml"
   },
-  "Spotify": {
+  "spotify": {
     ...ruleProviderCommon,
     "behavior": "classical",
     "url": "https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Shopify/Shopify.yaml",
-    "path": "./ruleset/blackmatrix7/Spotify.yaml"
+    "path": "./ruleset/blackmatrix7/spotify.yaml"
   },
-  "BilibiliHMT": {
+  "bilibilihmt": {
     ...ruleProviderCommon,
     "behavior": "classical",
     "url": "https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/BiliBiliIntl/BiliBiliIntl.yaml",
-    "path": "./ruleset/blackmatrix7/BilibiliHMT.yaml"
+    "path": "./ruleset/blackmatrix7/Bilibilihmt.yaml"
   },
   "bahamut": {
     ...ruleProviderCommon,
@@ -176,7 +181,7 @@ const ruleProviders = {
     "behavior": "classical",
     // "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/google-gemini.yaml",
     "url": "https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Gemini/Gemini.yaml",
-    "path": "./ruleset/blackmatrix7/google-gemini.yaml"
+    "path": "./ruleset/blackmatrix7/gemini.yaml"
   },
   "microsoft": {
     ...ruleProviderCommon,
@@ -185,11 +190,11 @@ const ruleProviders = {
     "url": "https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Microsoft/Microsoft.yaml",
     "path": "./ruleset/blackmatrix7/microsoft.yaml"
   },
-  "TikTok": {
+  "tiktok": {
     ...ruleProviderCommon,
     "behavior": "classical",
     "url": "https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/TikTok/TikTok.yaml",
-    "path": "./ruleset/blackmatrix7/TikTok.yaml"
+    "path": "./ruleset/blackmatrix7/tiktok.yaml"
   },
   "steamcn": {
     ...ruleProviderCommon,
@@ -225,23 +230,27 @@ const rules = [
   "DOMAIN-SUFFIX,github.io,节点选择", // Github Pages
   "DOMAIN,v2rayse.com,节点选择", // V2rayse节点工具
   "RULE-SET,steamcn,全局直连",
+  // 匹配类型, 规则集 ,代理组/连接方式
+  // blackmatrix7 规则集
+  "RULE-SET,claude,Claude",
+  "RULE-SET,openai,OpenAI",
+  "RULE-SET, facebook,",
   // Loyalsoldier 规则集
   "RULE-SET,applications,全局直连",
   "RULE-SET,private,全局直连",
   "RULE-SET,reject,广告过滤",
   "RULE-SET,icloud,苹果服务",
   "RULE-SET,apple,苹果服务",
-  "RULE-SET,YouTube,YouTube",
-  "RULE-SET,Netflix,Netflix",
-  "RULE-SET,Spotify,Spotify",
-  "RULE-SET,BilibiliHMT,哔哩哔哩港澳台",
+  "RULE-SET,youtube,YouTube",
+  "RULE-SET,netflix,Netflix",
+  "RULE-SET,spotify,Spotify",
+  "RULE-SET,bilibilihmt,哔哩哔哩港澳台",
   "RULE-SET,bahamut,Bahamut",
-  "RULE-SET,TikTok,TikTok",
+  "RULE-SET,tiktok,TikTok",
   "RULE-SET,gemini,Gemini",
-  "RULE-SET,google,Google",
-  "RULE-SET,claude,Claude",
-  "RULE-SET,openai,OpenAI",
+  "RULE-SET,google,谷歌服务",
   "RULE-SET,microsoft,微软服务",
+  // 通用规则
   "RULE-SET,proxy,节点选择",
   "RULE-SET,gfw,节点选择",
   "RULE-SET,tld-not-cn,节点选择",
@@ -321,7 +330,7 @@ function main(config) {
     },
     {
       ...groupBaseOption,
-      "name": "Google",
+      "name": "谷歌服务",
       "type": "select",
       "proxies": ["节点选择", "延迟选优", "故障转移", "负载均衡(散列)", "负载均衡(轮询)", "HK", "TW", "JP", "KR", "US", "DE", "SG", "FR", "UK", "全局直连"],
       "include-all": true,
