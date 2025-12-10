@@ -11,7 +11,6 @@ const foreignNameservers = [
   "https://208.67.222.222/dns-query", // OpenDNS(主)
   "https://208.67.220.220/dns-query", // OpenDNS(备)
   "https://8.8.4.4/dns-query", // GoogleDNS  
-
 ];
 // DNS配置
 const dnsConfig = {
@@ -44,15 +43,20 @@ const dnsConfig = {
     "localhost.work.weixin.qq.com"
   ],
   "default-nameserver": ["223.5.5.5", "1.2.4.8"],//可修改成自己ISP的DNS
-  // "default-nameserver": ["223.5.5.5", "119.29.29.29", "1.1.1.1", "8.8.8.8"],
   "nameserver": [...foreignNameservers],
   "proxy-server-nameserver": [...domesticNameservers],
   "direct-nameserver": [...domesticNameservers],
   "nameserver-policy": {
     "geosite:private,cn": domesticNameservers,
     "geosite:google,youtube,telegram,gfw,geolocation-!cn": foreignNameservers
-
   }
+  // "default-nameserver": ["223.5.5.5", "119.29.29.29", "1.1.1.1"],
+  // "nameserver": [...domesticNameservers, ...foreignNameservers],
+  // "proxy-server-nameserver": [...domesticNameservers, ...foreignNameservers],
+  // "nameserver-policy": {
+  //   "geosite:private,cn,geolocation-cn": domesticNameservers,
+  //   "geosite:google,youtube,telegram,gfw,geolocation-!cn": foreignNameservers
+  // }
 };
 // 规则集通用配置
 const ruleProviderCommon = {
@@ -82,9 +86,10 @@ const ruleProviders = {
   },
   "google": {
     ...ruleProviderCommon,
-    "behavior": "domain",
-    "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/google.txt",
-    "path": "./ruleset/loyalsoldier/google.yaml"
+    "behavior": "classical",
+    // "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/google.txt",
+    "url": "https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Google/Google.yaml",
+    "path": "./ruleset/blackmatrix7/google.yaml"
   },
   "proxy": {
     ...ruleProviderCommon,
@@ -234,7 +239,8 @@ const rules = [
   // blackmatrix7 规则集
   "RULE-SET,claude,Claude",
   "RULE-SET,openai,OpenAI",
-  "RULE-SET, facebook,",
+  "RULE-SET, facebook,Facebook",
+  "RULE-SET,google,谷歌服务",
   // Loyalsoldier 规则集
   "RULE-SET,applications,全局直连",
   "RULE-SET,private,全局直连",
@@ -248,7 +254,6 @@ const rules = [
   "RULE-SET,bahamut,Bahamut",
   "RULE-SET,tiktok,TikTok",
   "RULE-SET,gemini,Gemini",
-  "RULE-SET,google,谷歌服务",
   "RULE-SET,microsoft,微软服务",
   // 通用规则
   "RULE-SET,proxy,节点选择",
@@ -539,15 +544,6 @@ function main(config) {
     },
     {
       ...groupBaseOption,
-      "name": "FR",
-      "type": "url-test",
-      "include-all": true,
-      "filter": "法国|FR|🇫🇷",
-      "tolerance": 50,
-      "icon": "https://fastly.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/France.png"
-    },
-    {
-      ...groupBaseOption,
       "name": "UK",
       "type": "url-test",
       "include-all": true,
@@ -575,10 +571,8 @@ function main(config) {
     config["proxies"].forEach(proxy => {
       // 为每个节点设置 udp = true
       proxy.udp = true
-
     })
   }
   // 返回修改后的配置
   return config;
-
 }
