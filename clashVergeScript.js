@@ -48,7 +48,10 @@ const dnsConfig = {
   "direct-nameserver": [...domesticNameservers],
   "nameserver-policy": {
     "geosite:private,cn": domesticNameservers,
-    "geosite:google,youtube,telegram,gfw,geolocation-!cn": foreignNameservers
+    "geosite:google,youtube,telegram,gfw,geolocation-!cn": foreignNameservers,
+    // 访问公司内网域名
+    // '+.helloworld.com': '10.10.10.1'
+
   }
   // "default-nameserver": ["223.5.5.5", "119.29.29.29", "1.1.1.1"],
   // "nameserver": [...domesticNameservers, ...foreignNameservers],
@@ -281,6 +284,7 @@ const groupBaseOption = {
 
 // 程序入口
 function main(config) {
+  const originConfig = config;
   const proxyCount = config?.proxies?.length ?? 0;
   const proxyProviderCount =
     typeof config?.["proxy-providers"] === "object" ? Object.keys(config["proxy-providers"]).length : 0;
@@ -575,4 +579,6 @@ function main(config) {
   }
   // 返回修改后的配置
   return config;
+  // reset
+  // return originConfig;
 }
